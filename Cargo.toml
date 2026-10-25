@@ -1,0 +1,22 @@
+[workspace]
+resolver = "2"
+members = ["kernel", "user"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["coolstack-coder"]
+license = "MIT"
+
+[profile.dev]
+panic = "abort"
+opt-level = 1
+
+[profile.release]
+panic = "abort"
+opt-level = 2
+debug = 1
+
+# user programs get embedded in the kernel image; keep them lean
+[profile.release.package.gk-user]
+debug = false

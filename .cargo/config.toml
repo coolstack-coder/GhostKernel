@@ -1,0 +1,8 @@
+# Everything here is freestanding x86-64. The built-in `x86_64-unknown-none`
+# target already gives us soft-float, no red zone and panic=abort, so no
+# custom target JSON / build-std dance is needed.
+[build]
+target = "x86_64-unknown-none"
+
+[target.x86_64-unknown-none]
+rustflags = ["-C", "relocation-model=static", "-C", "force-frame-pointers=yes"]
