@@ -1,0 +1,23 @@
+[package]
+name = "ghostkernel"
+description = "A tiny x86-64 kernel whose processes come back from the dead."
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "ghostkernel"
+path = "src/main.rs"
+test = false
+bench = false
+
+[features]
+default = []
+# Boot straight into the in-kernel test suite and exit QEMU with the result.
+selftest = []
+
+[dependencies]
+spin = "0.9"
+linked_list_allocator = "0.10"
+noto-sans-mono-bitmap = { version = "0.3", default-features = false, features = ["regular", "bold", "size_16", "size_24", "size_32", "unicode-basic-latin", "unicode-latin-1-supplement", "unicode-specials"] }
