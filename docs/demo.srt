@@ -1,0 +1,76 @@
+1
+00:00:04,473 --> 00:00:09,495
+GhostKernel: an x86-64 kernel in Rust. It boots from its own multiboot assembly into long mode.
+
+2
+00:00:09,495 --> 00:00:15,515
+Five processes in ring 3, each with its own page tables, sharing the CPU through a preemptive scheduler.
+
+3
+00:00:15,515 --> 00:00:22,661
+primes checkpoints itself every 3 batches. life never asked for it: the kernel snapshots it every second.
+
+4
+00:00:22,661 --> 00:00:27,689
+The ghost timeline: every dot is a checkpoint. Diamonds are full images, small dots are dirty-page deltas.
+
+5
+00:00:27,689 --> 00:00:35,843
+Every process is mortal unless it has a ghost: a chain of checkpoints.
+
+6
+00:00:35,843 --> 00:00:48,486
+The checkpoints are real files: one FULL image, then deltas with only the pages the CPU marked dirty.
+
+7
+00:00:48,486 --> 00:00:52,853
+Now break primes for real: its saved RIP becomes 0x0. The CPU raises a page fault in ring 3.
+
+8
+00:00:52,853 --> 00:00:56,691
+The kernel throws away the dead address space and rebuilds it, page by page, from the checkpoint chain.
+
+9
+00:00:56,691 --> 00:01:02,385
+primes wakes up inside checkpoint(), mid-computation, not at prime #0. Its log was rolled back to match: no duplicates.
+
+10
+00:01:02,385 --> 00:01:06,451
+On the timeline: a red cross for the crash, a green arrow for the resurrection a few microseconds later.
+
+11
+00:01:06,451 --> 00:01:11,301
+life doesn't know checkpoints exist. A general-protection fault, and...
+
+12
+00:01:11,301 --> 00:01:19,062
+...the board snaps back to its last snapshot and keeps evolving.
+
+13
+00:01:19,062 --> 00:01:28,020
+counter is the control group. No ghost. Same kind of fault.
+
+14
+00:01:28,020 --> 00:01:36,062
+It's gone for good, along with everything it computed.
+
+15
+00:01:36,062 --> 00:01:45,500
+flaky has a real bug that fires at the same step every time. Watch the kernel react.
+
+16
+00:01:45,500 --> 00:01:52,918
+First retry: the newest checkpoint. It crashes again, so the kernel falls back one generation...
+
+17
+00:01:52,918 --> 00:02:04,793
+...and once it's clearly a crash loop, it stops instead of resurrecting it forever.
+
+18
+00:02:04,793 --> 00:02:30,055
+After all of that, primes' log has every batch exactly once, in order.
+
+19
+00:02:30,055 --> 00:02:41,202
+GhostKernel: processes that come back from the dead.
+
