@@ -1,0 +1,43 @@
+[package]
+name = "gk-user"
+description = "GhostKernel user space: a tiny runtime (ulib) and the programs in /bin."
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lib]
+name = "ulib"
+path = "src/lib.rs"
+test = false
+bench = false
+
+[[bin]]
+name = "init"
+test = false
+bench = false
+
+[[bin]]
+name = "gsh"
+test = false
+bench = false
+
+[[bin]]
+name = "primes"
+test = false
+bench = false
+
+[[bin]]
+name = "life"
+test = false
+bench = false
+
+[[bin]]
+name = "counter"
+test = false
+bench = false
+
+[[bin]]
+name = "flaky"
+test = false
+bench = false
