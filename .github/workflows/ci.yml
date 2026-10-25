@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  kernel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install QEMU
+        run: sudo apt-get update && sudo apt-get install -y qemu-system-x86
+
+      - name: Install Rust (from rust-toolchain.toml)
+        run: rustup show
+
+      - name: Lint
+        run: |
+          cargo fmt --all --check
+          make user
+          cargo clippy --release -p ghostkernel -p gk-user -- -D warnings
+
+      - name: Kernel self-tests
+        run: make test QEMU=qemu-system-x86_64
+
+      - name: End-to-end
+        run: make e2e QEMU=qemu-system-x86_64
+
+      - name: Keep the serial logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: serial-logs
+          path: build/*.log
